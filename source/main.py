@@ -464,7 +464,7 @@ roletoremove = 1
 @bot.tree.command(name="replaceallroles", description="A moderator only command to replace all roles.")
 @app_commands.checks.has_any_role(*MODERATOR_ROLE_ID, "You don't have access to this command.")
 async def replace_all_roles(interaction: discord.Interaction):
-    if interaction.user.id not in MODERATOR_ROLE_ID:
+    if interaction.user.id not in OWNER_ROLE_ID:
         print("Bro")
         return
     
