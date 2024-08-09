@@ -1,0 +1,2 @@
+# arid
+arid desolation bot.
