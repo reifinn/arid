@@ -88,44 +88,6 @@ async def on_ready():
 def is_mod_or_owner(user):
     return any(discord.utils.get(user.guild.roles, id=role_id) in user.roles for role_id in MODERATOR_ROLE_ID) or user.id in OWNER_ID
 
-def log_message(message):
-    log_path = 'logs.json'
-    message_data = {
-        'User ID:': str(message.author.id),
-        'Username:': message.author.name,
-        'messages': []
-    }
-
-    if os.path.exists(log_path):
-        with open(log_path, 'r') as file:
-            logs = json.load(file)
-    else:
-        logs = []
-
-    if message_data['User ID:'] in optedout_users:
-        return
-
-    user_found = False
-    for log in logs:
-        if log['User ID:'] == message_data['User ID:']:
-            user_found = True
-            log['messages'].append({
-                'Message:': message.content,
-                'Time:': str(message.created_at)
-            })
-            break
-
-    if not user_found:
-        message_data['messages'].append({
-            'Message:': message.content,
-            'Time:': str(message.created_at)
-        })
-        logs.append(message_data)
-
-    with open(log_path, 'w') as file:
-        json.dump(logs, file, indent=4)
-
-
 async def get_toxicity(text):
     analyze_request = {
         'comment': { 'text': text },
@@ -165,8 +127,6 @@ async def on_message(message):
         return
 
     toxicity_scores = await get_toxicity(message.content)
-
-    log_message(message)
 
     if is_mod_or_owner(message.author):
         return
